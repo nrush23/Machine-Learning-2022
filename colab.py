@@ -35,3 +35,52 @@ YouTubeVideo(YOUTUBE_ID)
 !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --disable_blending --write_json ./output/ --display 0  --render_pose 0
 # convert the result into MP4
 #!ffmpeg -y -loglevel info -i openpose.avi output.mp4
+
+
+# function to read and formatt the Json
+# returns an array of data for X and a 1/0 for y
+FRAMES = 100
+def ReadJsons(folder_dir):
+
+  # get all files in folder take first couple 
+  # !!! problem !!!! how do we make sure that we get the files in order
+  files = listdir(folder_dir)[:FRAMES]
+  files.sort()
+  for F in files:
+    # load int a json into dict data
+    f = open('data.json')
+    data = json.load(f)
+    
+    
+    
+    
+    
+    
+# train test split
+X, y = shuffle(X, y)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
+
+# train model    
+regr = svm.SVR(kernel = 'rbf')
+regr.fit(X_train, y_train)
+
+# predict and accuracy
+predY = regr.predict(X_test)
+mean_absolute_error(y_test, predY)
+
+# turning score into classification
+a = []
+for x in predY:
+  if x >= .5:
+    a.append(1)
+    continue
+  a.append(0)
+
+isSick = np.array(a)
+accuracy_score(y_test, isSick)
+
+
+
+
+
+
