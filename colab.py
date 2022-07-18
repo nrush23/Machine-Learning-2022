@@ -40,10 +40,17 @@ drive.mount('/content/drive')
 # !ffmpeg -y -loglevel info -i youtube.mp4 -t 5 video.mp4
 # # detect poses on the these 5 seconds
 
+
+
+
+# where are the data files
+data_dir = "drive/MyDrive/ProgramingTest"
+
+
+
 def runOpenPose(file_name): 
-  
-  !ffmpeg -y -loglevel info -i file_name -t 5 video.mp4
-  
+  command = "ffmpeg -y -loglevel info -i " + file_name + " -t 5 video.mp4"
+  os.system(command)
   !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --disable_blending --write_json ./output/ --display 0  --render_pose 0
  
 
@@ -54,54 +61,59 @@ def runOpenPose(file_name):
 # this will run in loop over all videos
 FRAMES = 100
 def ReadJsons(folder_dir,x):
-    
   # get all files in folder take first couple 
   # !!! problem !!!! how do we make sure that we get the files in order
-  files = listdir(folder_dir)[:FRAMES]
+  files = os.listdir(folder_dir)[:FRAMES]
   files.sort()
   for F in files:
     # load int a json into dict data
-    f = open(F)
+    f = open(folder_dir + "/" + F)
     data = json.load(f)
-    x.append(data['people']['pose_keypoints_2d'])
+    pos = data['people'][0]['pose_keypoints_2d']
+    x += pos
+            
             
   
   
-# running it
+  
+  
+# getting the data
 X = []
 y = []
 
 # locations of the data folders
-Healty_folder = ""
-Sick_folder = ""
+Healty_folder = "/Healthy"
+Sick_folder = "/UnHealthy"
   
 # get healthy data points
-Healthy_files = listdir(Healty_folder)
+Healthy_files = os.listdir(data_dir + Healty_folder)
 for vid in Healthy_files:
   # run openpose
   runOpenPose(vid)
   
   # compile the position data
   x = []
-  ReadJsons("./output", x)
+  ReadJsons(data_dir + "/output", x)
   
   # putting it into numpy array and adding to the X vals
   x_np = np.array(x)
   X.append(x_np)
   y.append(1)
-  
+  x_np
+
   # delete files in ./output to clear for next run of openpose
-  !rm -r ./output
+  command = "rm -r" + data_dir + "/output"
+  os.system(command)
   
 # get unhealthy data points
-Sick_files = listdir(Sick_folder)
+Sick_files = os.listdir(data_dir + Sick_folder)
 for vid in Sick_files:
   # run openpose
   runOpenPose(vid)
   
   # compile the position data
   x = []
-  ReadJsons("./output", x)
+  ReadJsons(data_dir + "/output", x)
   
   # putting it into numpy array and adding to the X vals
   x_np = np.array(x)
@@ -109,10 +121,10 @@ for vid in Sick_files:
   y.append(0)
   
   # delete files in ./output to clear for next run of openpose
-  !rm -r ./output
+  command = "rm -r" + data_dir + "/output"
+  os.system(command)
   
   
-    
     
     
     
