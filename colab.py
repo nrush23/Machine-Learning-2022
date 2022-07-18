@@ -55,22 +55,27 @@ def runOpenPose(file_name):
  
 
 
+
 # function to read and format the Json
 # pass in list x and folder for json files
 # will populate x with the position data for 100 frames
 # this will run in loop over all videos
 FRAMES = 100
-def ReadJsons(folder_dir,x):
+def ReadJsons(folder_dir,X):
   # get all files in folder take first couple 
   # !!! problem !!!! how do we make sure that we get the files in order
   files = os.listdir(folder_dir)[:FRAMES]
   files.sort()
+  x = []
   for F in files:
     # load int a json into dict data
     f = open(folder_dir + "/" + F)
     data = json.load(f)
     pos = data['people'][0]['pose_keypoints_2d']
     x += pos
+
+  # add this data point to the list of data points
+  X.append(np.array(x))
             
             
   
@@ -91,15 +96,9 @@ for vid in Healthy_files:
   # run openpose
   runOpenPose(vid)
   
-  # compile the position data
-  x = []
-  ReadJsons(data_dir + "/output", x)
-  
-  # putting it into numpy array and adding to the X vals
-  x_np = np.array(x)
-  X.append(x_np)
+  # compile the position data and put it in X
+  ReadJsons(data_dir + "/output", X)
   y.append(1)
-  x_np
 
   # delete files in ./output to clear for next run of openpose
   command = "rm -r" + data_dir + "/output"
@@ -112,13 +111,9 @@ for vid in Sick_files:
   runOpenPose(vid)
   
   # compile the position data
-  x = []
-  ReadJsons(data_dir + "/output", x)
-  
-  # putting it into numpy array and adding to the X vals
-  x_np = np.array(x)
-  X.append(x_np)
+  ReadJsons(data_dir + "/output", X)
   y.append(0)
+
   
   # delete files in ./output to clear for next run of openpose
   command = "rm -r" + data_dir + "/output"
