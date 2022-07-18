@@ -25,18 +25,18 @@ if not exists(project_name):
   # build openpose
   !cd openpose && rm -rf build || true && mkdir build && cd build && cmake .. && make -j`nproc`
   
-from IPython.display import YouTubeVideo
+#from IPython.display import YouTubeVideo
 
-YOUTUBE_ID = 'RXABo9hm8B8'
+#YOUTUBE_ID = 'RXABo9hm8B8'
 
 
-YouTubeVideo(YOUTUBE_ID)
+#YouTubeVideo(YOUTUBE_ID)
 
 #!rm -rf youtube.mp4
 # download the youtube with the given ID
-!youtube-dl -f 'bestvideo[ext=mp4]' --output "youtube.%(ext)s" https://www.youtube.com/watch?v=$YOUTUBE_ID
+#!youtube-dl -f 'bestvideo[ext=mp4]' --output "youtube.%(ext)s" https://www.youtube.com/watch?v=$YOUTUBE_ID
 # cut the first 5 seconds
-!ffmpeg -y -loglevel info -i youtube.mp4 -t 5 video.mp4
+#!ffmpeg -y -loglevel info -i youtube.mp4 -t 5 video.mp4
 # detect poses on the these 5 seconds
 
 def runOpenPose(file_name): 
