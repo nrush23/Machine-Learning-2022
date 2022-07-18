@@ -38,10 +38,15 @@ YouTubeVideo(YOUTUBE_ID)
 # cut the first 5 seconds
 !ffmpeg -y -loglevel info -i youtube.mp4 -t 5 video.mp4
 # detect poses on the these 5 seconds
-#!rm openpose.avi
-!cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --disable_blending --write_json ./output/ --display 0  --render_pose 0
-# convert the result into MP4
-#!ffmpeg -y -loglevel info -i openpose.avi output.mp4
+
+def runOpenPose(file_name): 
+  global runs
+  
+  !ffmpeg -y -loglevel info -i file_name -t 5 video.mp4
+  #!rm openpose.avi
+  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --disable_blending --write_json ./output/ --display 0  --render_pose 0
+  # convert the result into MP4
+  #!ffmpeg -y -loglevel info -i openpose.avi output.mp4
 
 
 # function to read and format the Json
