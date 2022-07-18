@@ -1,7 +1,7 @@
 import os
-import shutil
 from os.path import exists, join, basename, splitext
 import numpy as np
+import json
 from sklearn import svm
 from sklearn.utils import shuffle
 from google.colab import drive
@@ -43,10 +43,9 @@ drive.mount('/content/drive')
 def runOpenPose(file_name): 
   
   !ffmpeg -y -loglevel info -i file_name -t 5 video.mp4
-  #!rm openpose.avi
+  
   !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --disable_blending --write_json ./output/ --display 0  --render_pose 0
-  # convert the result into MP4
-  #!ffmpeg -y -loglevel info -i openpose.avi output.mp4
+ 
 
 
 # function to read and format the Json
@@ -92,7 +91,7 @@ for vid in Healthy_files:
   y.append(1)
   
   # delete files in ./output to clear for next run of openpose
-  shutil.rmtree('./output')
+  !rm -r ./output
   
 # get unhealthy data points
 Sick_files = listdir(Sick_folder)
@@ -110,7 +109,7 @@ for vid in Sick_files:
   y.append(0)
   
   # delete files in ./output to clear for next run of openpose
-  shutil.rmtree('./output')
+  !rm -r ./output
   
   
     
