@@ -1,5 +1,12 @@
 import os
 from os.path import exists, join, basename, splitext
+import numpy as np
+from sklearn import svm
+from sklearn.utils import shuffle
+from google.colab import drive
+from sklearn.metrics import mean_absolute_error, accuracy_score
+from sklearn.model_selection import train_test_split
+drive.mount('/content/drive')
 
 git_repo_url = 'https://github.com/CMU-Perceptual-Computing-Lab/openpose.git'
 project_name = splitext(basename(git_repo_url))[0]
@@ -17,8 +24,13 @@ if not exists(project_name):
   !pip install -q youtube-dl
   # build openpose
   !cd openpose && rm -rf build || true && mkdir build && cd build && cmake .. && make -j`nproc`
+  
+from IPython.display import YouTubeVideo
 
 YOUTUBE_ID = 'RXABo9hm8B8'
+
+
+YouTubeVideo(YOUTUBE_ID)
 
 #!rm -rf youtube.mp4
 # download the youtube with the given ID
@@ -32,11 +44,13 @@ YOUTUBE_ID = 'RXABo9hm8B8'
 #!ffmpeg -y -loglevel info -i openpose.avi output.mp4
 
 
-# function to read and formatt the Json
-# returns an array of data for X and a 1/0 for y
+# function to read and format the Json
+# pass in list x and folder for json files
+# will populate x with the position data for 100 frames
+# this will run in loop over all videos
 FRAMES = 100
-def ReadJsons(folder_dir):
-
+def ReadJsons(folder_dir,x):
+    
   # get all files in folder take first couple 
   # !!! problem !!!! how do we make sure that we get the files in order
   files = listdir(folder_dir)[:FRAMES]
@@ -45,6 +59,10 @@ def ReadJsons(folder_dir):
     # load int a json into dict data
     f = open('data.json')
     data = json.load(f)
+    x.append(data['people']['pose_keypoints_2d'])
+            
+  
+  
     
     
     
