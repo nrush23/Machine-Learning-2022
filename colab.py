@@ -44,7 +44,7 @@ drive.mount('/content/drive')
 
 
 # where are the data files
-data_dir = "drive/MyDrive/ProgramingTest"
+working_dir = "drive/MyDrive/ProgramingTest"
 
 
 
@@ -87,36 +87,36 @@ X = []
 y = []
 
 # locations of the data folders
-Healty_folder = "/Healthy"
-Sick_folder = "/UnHealthy"
+Healty_folder = working_dir + "/Healthy"
+Sick_folder = working_dir + "/UnHealthy"
   
 # get healthy data points
-Healthy_files = os.listdir(data_dir + Healty_folder)
+Healthy_files = os.listdir(Healty_folder)
 for vid in Healthy_files:
   # run openpose
   runOpenPose(vid)
   
   # compile the position data and put it in X
-  ReadJsons(data_dir + "/output", X)
+  ReadJsons(working_dir + "/output", X)
   y.append(1)
 
   # delete files in ./output to clear for next run of openpose
-  command = "rm -r" + data_dir + "/output"
+  command = "rm -r" + working_dir + "/output"
   os.system(command)
   
 # get unhealthy data points
-Sick_files = os.listdir(data_dir + Sick_folder)
+Sick_files = os.listdir(Sick_folder)
 for vid in Sick_files:
   # run openpose
   runOpenPose(vid)
   
   # compile the position data
-  ReadJsons(data_dir + "/output", X)
+  ReadJsons(working_dir + "/output", X)
   y.append(0)
 
   
   # delete files in ./output to clear for next run of openpose
-  command = "rm -r" + data_dir + "/output"
+  command = "rm -r" + working_dir + "/output"
   os.system(command)
   
   
