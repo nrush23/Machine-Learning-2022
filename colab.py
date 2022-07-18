@@ -17,13 +17,8 @@ if not exists(project_name):
   !pip install -q youtube-dl
   # build openpose
   !cd openpose && rm -rf build || true && mkdir build && cd build && cmake .. && make -j`nproc`
-  
-from IPython.display import YouTubeVideo
 
 YOUTUBE_ID = 'RXABo9hm8B8'
-
-
-YouTubeVideo(YOUTUBE_ID)
 
 #!rm -rf youtube.mp4
 # download the youtube with the given ID
