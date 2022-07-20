@@ -39,7 +39,7 @@ def runOpenPose(file_name):
   os.system(command)
   
   # this openpose run is not outputing to the wordking_dir/output folder fix it
-  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --disable_blending --write_json ./output/ --display 0  --render_pose 0
+  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --write_json ./output/ --display 0  --render_pose 0
  
 
 
