@@ -98,13 +98,13 @@ X = []
 y = []
 
 # locations of the data folders
-Healty_folder = working_dir + "/Healthy"
+Healthy_folder = working_dir + "/Healthy"
 Sick_folder = working_dir + "/UnHealthy"
   
   
   
 # get healthy data points
-Healthy_files = os.listdir(Healty_folder)
+Healthy_files = os.listdir(Healthy_folder)
 for vid in Healthy_files:
   # run openpose
   runOpenPose(vid)
