@@ -26,20 +26,6 @@ drive.mount('/content/drive')
 #   # build openpose
 #   !cd openpose && rm -rf build || true && mkdir build && cd build && cmake .. && make -j`nproc`
   
-# from IPython.display import YouTubeVideo
-
-# YOUTUBE_ID = 'RXABo9hm8B8'
-
-
-# YouTubeVideo(YOUTUBE_ID)
-
-# #!rm -rf youtube.mp4
-# # download the youtube with the given ID
-# !youtube-dl -f 'bestvideo[ext=mp4]' --output "youtube.%(ext)s" https://www.youtube.com/watch?v=$YOUTUBE_ID
-# # cut the first 5 seconds
-# !ffmpeg -y -loglevel info -i youtube.mp4 -t 5 video.mp4
-# # detect poses on the these 5 seconds
-
 
 
 
@@ -51,8 +37,27 @@ working_dir = "drive/MyDrive/ProgramingTest"
 def runOpenPose(file_name): 
   command = "ffmpeg -y -loglevel info -i " + file_name + " -t 5 video.mp4"
   os.system(command)
-  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --write_json ./output/ --display 0  --render_pose 0
+  
+  # this openpose run is not outputing to the wordking_dir/output folder fix it
+  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --disable_blending --write_json ./output/ --display 0  --render_pose 0
  
+
+
+
+
+
+# takes in the dict of open pose data
+# output a 1d array of the data we want to use
+# probably want output as np array
+# may have to change around what we put in etc
+def selectData(PoseData):
+  
+  # this is a place holder need someone
+  return data['people'][0]['pose_keypoints_2d']
+
+
+
+
 
 
 
@@ -71,13 +76,18 @@ def ReadJsons(folder_dir,X):
     # load int a json into dict data
     f = open(folder_dir + "/" + F)
     data = json.load(f)
-    pos = data['people'][0]['pose_keypoints_2d']
-    x += pos
+    x += selectData(data)
 
   # add this data point to the list of data points
   X.append(np.array(x))
             
             
+  
+  
+  
+  
+ 
+# data collection + running opepose + reading jsons
   
   
   
@@ -90,6 +100,8 @@ y = []
 Healty_folder = working_dir + "/Healthy"
 Sick_folder = working_dir + "/UnHealthy"
   
+  
+  
 # get healthy data points
 Healthy_files = os.listdir(Healty_folder)
 for vid in Healthy_files:
@@ -101,6 +113,7 @@ for vid in Healthy_files:
   y.append(1)
 
   # delete files in ./output to clear for next run of openpose
+  # this is not working for some reason
   command = "rm -r" + working_dir + "/output"
   os.system(command)
   
@@ -116,11 +129,22 @@ for vid in Sick_files:
 
   
   # delete files in ./output to clear for next run of openpose
+  # this is not working for some reason
   command = "rm -r" + working_dir + "/output"
   os.system(command)
   
   
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+ # ML   
     
     
     
