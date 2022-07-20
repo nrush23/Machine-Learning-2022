@@ -51,7 +51,7 @@ working_dir = "drive/MyDrive/ProgramingTest"
 def runOpenPose(file_name): 
   command = "ffmpeg -y -loglevel info -i " + file_name + " -t 5 video.mp4"
   os.system(command)
-  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --disable_blending --write_json ./output/ --display 0  --render_pose 0
+  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --write_json ./output/ --display 0  --render_pose 0
  
 
 
