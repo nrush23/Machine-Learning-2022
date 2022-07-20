@@ -37,14 +37,19 @@ os.chdir(working_dir)
 #   !cd ..
 
 
-# Include path to file. Example: Healthy/myvideo.mp4
-def runOpenPose(file_name):
-  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --write_json ../output/ --display 0  --render_pose 0
+# where are the data files
+working_dir = "drive/MyDrive/T9_Shared_Drive_2022/ProgrammingFiles"
+
+
+def runOpenPose(file_name): 
+  command = "ffmpeg -y -loglevel info -i " + file_name + " -t 5 video.mp4"
+  os.system(command)
+  
+  # run openpose
+  command = "cd openpose && ./build/examples/openpose/openpose.bin --video " + "../video.mp4 --write_json " + working_dir + "/output/ --display 0  --render_pose 0"
+  os.system(command)
+
  
-
-
-
-
 
 # takes in the dict of open pose data
 # output a 1d array of the data we want to use
@@ -54,10 +59,6 @@ def selectData(PoseData):
   
   # this is a place holder need someone
   return data['people'][0]['pose_keypoints_2d']
-
-
-
-
 
 
 
@@ -80,18 +81,23 @@ def ReadJsons(folder_dir,X):
 
   # add this data point to the list of data points
   X.append(np.array(x))
-            
-            
+
+
+def ClearOutput():
+  files = os.listdir(working_dir + "/output")
+  for f in files:
+    os.remove(working_dir + f) 
   
   
+
   
   
- 
 # data collection + running opepose + reading jsons
   
   
   
   
+ 
 # getting the data
 X = []
 y = []
@@ -100,26 +106,29 @@ y = []
 Healty_folder = working_dir + "/Healthy"
 Sick_folder = working_dir + "/UnHealthy"
   
-  
+# content/drive/MyDrive/T9_Shared_Drive_2022/ProgrammingFiles/Healthy
+# content/drive/MyDrive/T9_Shared_Drive_2022/ProgrammingFiles/Healthy
+
   
 # get healthy data points
 Healthy_files = os.listdir(Healty_folder)
+
+
 for vid in Healthy_files:
   # run openpose
   runOpenPose(vid)
-  
+
   # compile the position data and put it in X
   ReadJsons(working_dir + "/output", X)
   y.append(1)
 
   # delete files in ./output to clear for next run of openpose
-  # this is not working for some reason
-  # command = "rm -r" + working_dir + "/output"
-  # os.system(command)
-  shutil.rmtree(working_dir + "/output")
+  ClearOutput()
+
   
 # get unhealthy data points
 Sick_files = os.listdir(Sick_folder)
+
 for vid in Sick_files:
   # run openpose
   runOpenPose(vid)
@@ -130,9 +139,8 @@ for vid in Sick_files:
 
   
   # delete files in ./output to clear for next run of openpose
-  # this is not working for some reason
-  command = "rm -r" + working_dir + "/output"
-  os.system(command)
+  ClearOutput()
+
   
   
     
