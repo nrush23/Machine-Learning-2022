@@ -7,8 +7,16 @@ from sklearn.utils import shuffle
 from google.colab import drive
 from sklearn.metrics import mean_absolute_error, accuracy_score
 from sklearn.model_selection import train_test_split
-drive.mount('/content/drive')
 import shutil
+drive.mount('/content/drive')
+
+working_dir = "drive/MyDrive/T9_Shared_Drive_2022/ProgrammingFiles"
+os.chdir(working_dir)
+
+#################################
+# run above ONCE during session!! (seperate cell)
+#################################
+
 
 # git_repo_url = 'https://github.com/CMU-Perceptual-Computing-Lab/openpose.git'
 # project_name = splitext(basename(git_repo_url))[0]
@@ -26,21 +34,12 @@ import shutil
 #   !pip install -q youtube-dl
 #   # build openpose
 #   !cd openpose && rm -rf build || true && mkdir build && cd build && cmake .. && make -j`nproc`
-  
+#   !cd ..
 
 
-
-# where are the data files
-working_dir = "drive/MyDrive/T9_Shared_Drive_2022/ProgrammingFiles"
-
-
-
-def runOpenPose(file_name): 
-  command = "ffmpeg -y -loglevel info -i " + file_name + " -t 5 video.mp4"
-  os.system(command)
-  
-  # this openpose run is not outputing to the wordking_dir/output folder fix it
-  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --write_json ./output/ --display 0  --render_pose 0
+# Include path to file. Example: Healthy/myvideo.mp4
+def runOpenPose(file_name):
+  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --write_json ../output/ --display 0  --render_pose 0
  
 
 
@@ -98,13 +97,13 @@ X = []
 y = []
 
 # locations of the data folders
-Healthy_folder = working_dir + "/Healthy"
+Healty_folder = working_dir + "/Healthy"
 Sick_folder = working_dir + "/UnHealthy"
   
   
   
 # get healthy data points
-Healthy_files = os.listdir(Healthy_folder)
+Healthy_files = os.listdir(Healty_folder)
 for vid in Healthy_files:
   # run openpose
   runOpenPose(vid)
@@ -115,8 +114,9 @@ for vid in Healthy_files:
 
   # delete files in ./output to clear for next run of openpose
   # this is not working for some reason
-  command = "rm -r" + working_dir + "/output"
-  os.system(command)
+  # command = "rm -r" + working_dir + "/output"
+  # os.system(command)
+  shutil.rmtree(working_dir + "/output")
   
 # get unhealthy data points
 Sick_files = os.listdir(Sick_folder)
@@ -131,9 +131,8 @@ for vid in Sick_files:
   
   # delete files in ./output to clear for next run of openpose
   # this is not working for some reason
-  #command = "rm -r" + working_dir + "/output"
-  #os.system(command)
-  shutil.rmtree(working_dir + '/output')
+  command = "rm -r" + working_dir + "/output"
+  os.system(command)
   
   
     
@@ -173,9 +172,3 @@ for x in predY:
 
 isSick = np.array(a)
 accuracy_score(y_test, isSick)
-
-
-
-
-
-
