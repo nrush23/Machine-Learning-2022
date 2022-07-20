@@ -37,13 +37,12 @@ os.chdir(working_dir)
 #   !cd ..
 
 
+
+
 # Include path to file. Example: Healthy/myvideo.mp4
 def runOpenPose(file_name):
   !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --write_json ../output/ --display 0  --render_pose 0
  
-
-
-
 
 
 # takes in the dict of open pose data
@@ -54,9 +53,6 @@ def selectData(PoseData):
   
   # this is a place holder need someone
   return data['people'][0]['pose_keypoints_2d']
-
-
-
 
 
 
@@ -81,7 +77,6 @@ def ReadJsons(folder_dir,X):
   # add this data point to the list of data points
   X.append(np.array(x))
             
-            
   
   
   
@@ -91,14 +86,14 @@ def ReadJsons(folder_dir,X):
   
   
   
-  
+ 
 # getting the data
 X = []
 y = []
 
 # locations of the data folders
-Healty_folder = working_dir + "/Healthy"
-Sick_folder = working_dir + "/UnHealthy"
+Healty_folder = "Healthy"
+Sick_folder = "UnHealthy"
   
   
   
@@ -109,15 +104,13 @@ for vid in Healthy_files:
   runOpenPose(vid)
   
   # compile the position data and put it in X
-  ReadJsons(working_dir + "/output", X)
+  ReadJsons("output", X)
   y.append(1)
 
   # delete files in ./output to clear for next run of openpose
-  # this is not working for some reason
-  # command = "rm -r" + working_dir + "/output"
-  # os.system(command)
-  shutil.rmtree(working_dir + "/output")
+  !rm -r output
   
+
 # get unhealthy data points
 Sick_files = os.listdir(Sick_folder)
 for vid in Sick_files:
@@ -125,14 +118,12 @@ for vid in Sick_files:
   runOpenPose(vid)
   
   # compile the position data
-  ReadJsons(working_dir + "/output", X)
+  ReadJsons("output", X)
   y.append(0)
 
   
   # delete files in ./output to clear for next run of openpose
-  # this is not working for some reason
-  command = "rm -r" + working_dir + "/output"
-  os.system(command)
+  !rm -r output
   
   
     
