@@ -133,7 +133,7 @@ for vid in Sick_files:
   # this is not working for some reason
   #command = "rm -r" + working_dir + "/output"
   #os.system(command)
-  shutil.rmtree('output')
+  shutil.rmtree('drive/MyDrive/T9_Shared_Drive_2022/ProgrammingFiles')
   
   
     
