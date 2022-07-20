@@ -8,6 +8,7 @@ from google.colab import drive
 from sklearn.metrics import mean_absolute_error, accuracy_score
 from sklearn.model_selection import train_test_split
 drive.mount('/content/drive')
+import shutil
 
 # git_repo_url = 'https://github.com/CMU-Perceptual-Computing-Lab/openpose.git'
 # project_name = splitext(basename(git_repo_url))[0]
@@ -130,8 +131,9 @@ for vid in Sick_files:
   
   # delete files in ./output to clear for next run of openpose
   # this is not working for some reason
-  command = "rm -r" + working_dir + "/output"
-  os.system(command)
+  #command = "rm -r" + working_dir + "/output"
+  #os.system(command)
+  shutil.rmtree('output')
   
   
     
