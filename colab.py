@@ -41,7 +41,7 @@ os.chdir(working_dir)
 
 # Include path to file. Example: Healthy/myvideo.mp4
 def runOpenPose(file_name):
-  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --write_json ../output/ --display 0  --render_pose 0
+  !cd openpose && ./build/examples/openpose/openpose.bin --video ../video.mp4 --write_json ../output/ --display 0  --write_video ../openpose.avi
  
 
 
