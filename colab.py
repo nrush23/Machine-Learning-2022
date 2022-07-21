@@ -49,10 +49,22 @@ def runOpenPose(file_name):
 # output a 1d array of the data we want to use
 # probably want output as np array
 # may have to change around what we put in etc
-def selectData(PoseData):
+def selectData(X):
+  # IMPORTANT - currently, this just returns all of the numbers in one array
+  # based on the desicions of the medical/research team,
+  # we will edit this function to just output certain data such as 
+  # just certain limbs or angles etc
+  output = []
+  for dict in X:
+    pose = dict['people'][0]['pose_keypoints_2d']
+    for i in range(len(pose)):
+      if i % 3 == 0:
+        output.append(pose[i])
+      if i % 3 == 1:
+        output.append(pose[i])
   
-  # this is a place holder need someone
-  return data['people'][0]['pose_keypoints_2d']
+  return output
+  # return data['people'][0]['pose_keypoints_2d']
 
 
 
