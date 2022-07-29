@@ -19,6 +19,8 @@ from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.utils import to_categorical
 
+# drive mounting to folders
+
 from google.colab import drive
 
 drive.mount('/content/drive')
@@ -27,10 +29,6 @@ working_dir = "drive/MyDrive/T9_Shared_Drive_2022/RawData"
 os.chdir(working_dir)
 
 num = "30"
-
-
-
-
 
 size = 200, 200
 
