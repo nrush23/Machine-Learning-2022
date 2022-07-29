@@ -37,8 +37,7 @@ size = 200, 200
 # get the path/directory
 Tfolder_dir = "SimImg" + num 
 Ffolder_dir = "UnSimImg" + num
-# Tfolder_dir = "Unhealthy30F_output_2022-07-27_18:48:18"
-# Ffolder_dir = "Healthy30F_output_2022-07-27_18:48:13"
+
 
 
 TList = listdir(Tfolder_dir)
@@ -84,16 +83,18 @@ X, y = shuffle(X, y)
 
 
 nsamples, nx, ny = X.shape
-#X = X.reshape((nsamples,nx*ny))
- test train split
+
+#test train split
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.10, random_state=40, stratify=y)
-k = 0
-for i in y_test:
-  k += i
 
-print(k)
-print(len(y_test))
+			
+# k = 0
+# for i in y_test:
+#   k += i
+
+# print(k)
+# print(len(y_test))
 
 def baseline_model(inputShape = (200,200,1)):
 	# create model
@@ -108,19 +109,21 @@ def baseline_model(inputShape = (200,200,1)):
   
 def fitting_model(model, x, y, epoch):
     model.fit(x,y, shuffle = True, epochs = epoch)
-    
-    model = baseline_model()
+
+			
+
+			
+			
+			
+model = baseline_model()
 fitting_model(model, X_train, y_train, epoch = 1)
 
-# svc = svm.SVC(kernel = 'rbf')
-# svc.fit(X_train, y_train)
 
 # predict and accuracy
-
 predY = model.predict(X_test)
 
 
-# predY = svc.predict(X_test)
+
 
 accuracy_score(y_test, predY)
 
